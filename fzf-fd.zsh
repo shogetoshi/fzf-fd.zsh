@@ -14,10 +14,10 @@ function get_dir() {
     fi
     # ディレクトリ部分を取得（最後のスラッシュより前）
     local dir="${last_word%/*}"
-    # ~で始まるパスをホームディレクトリに展開
-    if [[ "$dir" == "~"* ]]; then
-        dir="${dir/#\~/$HOME}"
-    fi
+    # ~をホームディレクトリに展開
+    dir="${dir/#\~/$HOME}"
+    # 環境変数を展開
+    dir="${(e)dir}"
     echo "$dir"
 }
 

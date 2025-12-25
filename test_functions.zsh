@@ -45,6 +45,8 @@ assert_eq ".git" "$(get_dir '.git/aaa')" ".git/aaa -> .git"
 assert_eq "/path/to" "$(get_dir 'cat /path/to/file.txt')" "cat /path/to/file.txt -> /path/to"
 assert_eq "$HOME" "$(get_dir '~/file.txt')" "~/file.txt -> \$HOME"
 assert_eq "$HOME/Documents" "$(get_dir '~/Documents/file.txt')" "~/Documents/file.txt -> \$HOME/Documents"
+assert_eq "$HOME" "$(get_dir '$HOME/file.txt')" "\$HOME/file.txt -> \$HOME"
+assert_eq "$HOME/Documents" "$(get_dir '$HOME/Documents/file.txt')" "\$HOME/Documents/file.txt -> \$HOME/Documents"
 
 echo ""
 echo "=== get_lbuf tests ==="
