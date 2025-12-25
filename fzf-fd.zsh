@@ -17,7 +17,16 @@ function get_dir() {
 }
 
 function get_query() {
-    echo ""
+    local lbuf="$1"
+    # LBUFFERの最後がスペースなら無関係なので空を返す
+    if [[ "$lbuf" == *" " ]]; then
+        echo ""
+        return
+    fi
+    # 最後の単語を取得
+    local last_word="${lbuf##* }"
+    # 最後の/以降を取得（/がなければ全体を返す）
+    echo "${last_word##*/}"
 }
 
 function get_lbuf() {
@@ -39,7 +48,7 @@ function get_search_path_opt() {
 
 function fzf-fd() {
     local dir=$(get_dir "${LBUFFER}" "${RBUFFER}")
-    local query=$(get_query)
+    local query=$(get_query "${LBUFFER}")
     local lbuf=$(get_lbuf ${LBUFFER})
     local rbuf=$(get_rbuf ${RBUFFER})
     if [[ -z $dir ]]; then
