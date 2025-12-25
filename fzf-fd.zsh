@@ -1,5 +1,19 @@
 function get_dir() {
-    echo ""
+    local lbuf="$1"
+    # LBUFFERの最後がスペースなら無関係なので空を返す
+    if [[ "$lbuf" == *" " ]]; then
+        echo ""
+        return
+    fi
+    # 最後の単語を取得
+    local last_word="${lbuf##* }"
+    # スラッシュがなければ空を返す
+    if [[ "$last_word" != *"/"* ]]; then
+        echo ""
+        return
+    fi
+    # ディレクトリ部分を取得（最後のスラッシュより前）
+    echo "${last_word%/*}"
 }
 
 function get_query() {
