@@ -1,6 +1,9 @@
 function fzf-fd() {
     local out
-    out=$(fd --type f --hidden --follow --exclude .git | fzf --multi)
+    out=$(fd -HI --ignore-file ~/.ignore -c always -t f | \
+        fzf --ansi --multi --reverse \
+        --preview 'bat --plain --number --color always {}' \
+        --preview-window down:70%)
     if [[ -n "$out" ]]; then
         out=$(echo "$out" | tr '\n' ' ' | sed 's/ $//')
         LBUFFER="${LBUFFER}${out}"
