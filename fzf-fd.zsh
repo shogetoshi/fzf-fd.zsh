@@ -63,7 +63,7 @@ function fzf-fd() {
     if [[ -z $dir ]]; then
         local search_path_opt=$(=get_search_path_opt)
         local out=$(fd -HI --ignore-file ~/.ignore -c always -t f ${search_path_opt} | \
-            fzf --ansi --multi --reverse \
+            fzf --ansi --multi --reverse --wrap \
             --query "$query" \
             --preview 'bat --plain --number --color always {}' \
             --preview-window down:70% \
@@ -71,7 +71,7 @@ function fzf-fd() {
         )
     else
         local out=$(fd -HI --ignore-file ~/.ignore -c always -t f --search-path ${dir} | \
-            fzf --ansi --multi --reverse \
+            fzf --ansi --multi --reverse --wrap \
             --query "$query" \
             --preview 'bat --plain --number --color always {}' \
             --preview-window down:70% \
