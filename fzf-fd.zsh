@@ -13,7 +13,12 @@ function get_dir() {
         return
     fi
     # ディレクトリ部分を取得（最後のスラッシュより前）
-    echo "${last_word%/*}"
+    local dir="${last_word%/*}"
+    # ~で始まるパスをホームディレクトリに展開
+    if [[ "$dir" == "~"* ]]; then
+        dir="${dir/#\~/$HOME}"
+    fi
+    echo "$dir"
 }
 
 function get_query() {

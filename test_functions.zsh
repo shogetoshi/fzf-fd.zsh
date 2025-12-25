@@ -43,6 +43,8 @@ assert_eq "aaa" "$(get_dir 'aaa/bbb')" "aaa/bbb -> aaa"
 assert_eq "" "$(get_dir 'aaa ')" "aaa (末尾スペース) -> 空"
 assert_eq ".git" "$(get_dir '.git/aaa')" ".git/aaa -> .git"
 assert_eq "/path/to" "$(get_dir 'cat /path/to/file.txt')" "cat /path/to/file.txt -> /path/to"
+assert_eq "$HOME" "$(get_dir '~/file.txt')" "~/file.txt -> \$HOME"
+assert_eq "$HOME/Documents" "$(get_dir '~/Documents/file.txt')" "~/Documents/file.txt -> \$HOME/Documents"
 
 echo ""
 echo "=== get_lbuf tests ==="
