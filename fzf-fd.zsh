@@ -43,7 +43,7 @@ function get_lbuf() {
 }
 
 function get_rbuf() {
-    echo "$1"
+    echo "${1## }"
 }
 
 function get_search_path_opt() {
@@ -79,9 +79,9 @@ function fzf-fd() {
         )
     fi
     if [[ -n "$out" ]]; then
-        out=$(echo "$out" | sed "s/.*/'&'/" | tr '\n' ' ' | sed 's/ $//')
-        LBUFFER="${lbuf}${out}"
-        CURSOR="${#LBUFFER}"
+        out=$(echo "$out" | sed "s/.*/'&'/" | tr '\n' ' ')
+        BUFFER="${lbuf}${out}${rbuf}"
+        CURSOR=$((${#lbuf}+${#out}))
     fi
     zle redisplay
 }
