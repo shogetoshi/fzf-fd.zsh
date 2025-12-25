@@ -30,7 +30,11 @@ function get_query() {
 }
 
 function get_lbuf() {
-    echo "$1"
+    local lbuf="$1"
+    # 最後の単語を取得（スペース区切りで最後の部分）
+    local last_word="${lbuf##* }"
+    # 最後の単語を除いた部分を返す
+    echo "${lbuf%${last_word}}"
 }
 
 function get_rbuf() {

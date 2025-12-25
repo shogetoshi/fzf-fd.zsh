@@ -45,6 +45,16 @@ assert_eq ".git" "$(get_dir '.git/aaa')" ".git/aaa -> .git"
 assert_eq "/path/to" "$(get_dir 'cat /path/to/file.txt')" "cat /path/to/file.txt -> /path/to"
 
 echo ""
+echo "=== get_lbuf tests ==="
+
+assert_eq "xxx " "$(get_lbuf 'xxx aaa/bbb')" "xxx aaa/bbb -> 'xxx '"
+assert_eq "" "$(get_lbuf 'aaa/bbb')" "aaa/bbb -> 空"
+assert_eq "aaa/bbb " "$(get_lbuf 'aaa/bbb ')" "aaa/bbb (末尾スペース) -> 'aaa/bbb '"
+assert_eq "" "$(get_lbuf '')" "空文字 -> 空"
+assert_eq "cat " "$(get_lbuf 'cat /path/to/file.txt')" "cat /path/to/file.txt -> 'cat '"
+assert_eq "foo bar " "$(get_lbuf 'foo bar baz')" "foo bar baz -> 'foo bar '"
+
+echo ""
 echo "=== Results ==="
 echo "Passed: $passed"
 echo "Failed: $failed"
