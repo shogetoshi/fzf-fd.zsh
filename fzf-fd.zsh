@@ -5,7 +5,7 @@ function fzf-fd() {
         --preview 'bat --plain --number --color always {}' \
         --preview-window down:70%)
     if [[ -n "$out" ]]; then
-        out=$(echo "$out" | tr '\n' ' ' | sed 's/ $//')
+        out=$(echo "$out" | sed "s/.*/'&'/" | tr '\n' ' ' | sed 's/ $//')
         LBUFFER="${LBUFFER}${out}"
         CURSOR="${#LBUFFER}"
     fi
