@@ -37,13 +37,19 @@ function fzf-fd() {
             --preview-window down:70% \
             --bind "alt-h:reload:fd -HI -c always -t f ${search_path_opt}" \
         )
-        if [[ -n "$out" ]]; then
-            out=$(echo "$out" | sed "s/.*/'&'/" | tr '\n' ' ' | sed 's/ $//')
-            LBUFFER="${lbuf}${out}"
-            CURSOR="${#LBUFFER}"
-        fi
     else
-        :
+        local out=$(fd -HI --ignore-file ~/.ignore -c always -t f --search-path ${dir} | \
+            fzf --ansi --multi --reverse \
+            --query "$query" \
+            --preview 'bat --plain --number --color always {}' \
+            --preview-window down:70% \
+            --bind "alt-h:reload:fd -HI -c always -t f --search-path ${dir}" \
+        )
+    fi
+    if [[ -n "$out" ]]; then
+        out=$(echo "$out" | sed "s/.*/'&'/" | tr '\n' ' ' | sed 's/ $//')
+        LBUFFER="${lbuf}${out}"
+        CURSOR="${#LBUFFER}"
     fi
     zle redisplay
 }
