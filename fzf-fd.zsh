@@ -47,7 +47,7 @@ function get_rbuf() {
 }
 
 function get_search_path_opt() {
-    local search_path=$(git rev-parse --show-cdup 2>/dev/null)
+    local search_path=$(git rev-parse --show-cdup)
     if [[ -n $search_path ]]; then
         echo "--search-path ${search_path}"
     else
@@ -60,9 +60,9 @@ function fzf-fd() {
     local query=$(get_query "${LBUFFER}")
     local lbuf=$(get_lbuf ${LBUFFER})
     local rbuf=$(get_rbuf ${RBUFFER})
-    if [[ -z $dir ]]; then
-        local search_path_opt=$(=get_search_path_opt)
-        local out=$(fd -HI --ignore-file ~/.ignore -c always -t f ${search_path_opt} | \
+    if [[ -z "$dir" ]]; then
+        local search_path_opt=$(get_search_path_opt)
+        local out=$(fd -HI --ignore-file ~/.ignore -c always -t f ${=search_path_opt} | \
             fzf --ansi --multi --reverse --wrap \
             --query "$query" \
             --preview 'bat --plain --number --color always {}' \
