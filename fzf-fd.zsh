@@ -79,7 +79,16 @@ function fzf-fd() {
         )
     fi
     if [[ -n "$out" ]]; then
-        out=$(echo "$out" | sed "s/.*/'&'/" | tr '\n' ' ')
+        local -a files
+        files=("${(@f)out}")
+        out=""
+        for f in "${files[@]}"; do
+            if [[ "${(q)f}" == "$f" ]]; then
+                out+="$f "
+            else
+                out+="${(qq)f} "
+            fi
+        done
         BUFFER="${lbuf}${out}${rbuf}"
         CURSOR=$((${#lbuf}+${#out}))
     fi
