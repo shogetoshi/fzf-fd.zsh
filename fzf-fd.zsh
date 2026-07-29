@@ -46,28 +46,21 @@ function get_rbuf() {
     echo "${1## }"
 }
 
-function get_search_path_opt() {
-    local search_path=$(git rev-parse --show-cdup)
-    if [[ -n $search_path ]]; then
-        echo "--search-path ${search_path}"
-    else
-        echo ""
-    fi
-}
-
 function fzf-fd() {
     local dir=$(get_dir "${LBUFFER}" "${RBUFFER}")
     local query=$(get_query "${LBUFFER}")
     local lbuf=$(get_lbuf ${LBUFFER})
     local rbuf=$(get_rbuf ${RBUFFER})
+    # alt-gでリポジトリルート配下を対象に再検索する（git管理外ならエラーで空になる）
+    local git_root_reload="fd -HI --ignore-file ${HOME}/.ignore -c always -t f --search-path \"\$(git rev-parse --show-toplevel)\""
     if [[ -z "$dir" ]]; then
-        local search_path_opt=$(get_search_path_opt)
-        local out=$(fd -HI --ignore-file ~/.ignore -c always -t f ${=search_path_opt} | \
+        local out=$(fd -HI --ignore-file ~/.ignore -c always -t f | \
             fzf --ansi --multi --reverse --wrap \
             --query "$query" \
             --preview 'bat --plain --number --color always {}' \
             --preview-window down:70% \
-            --bind "alt-h:reload:fd -HI -c always -t f ${search_path_opt}" \
+            --bind "alt-h:reload:fd -HI -c always -t f" \
+            --bind "alt-g:reload:${git_root_reload}" \
         )
     else
         local out=$(fd -HI --ignore-file ~/.ignore -c always -t f --search-path ${dir} | \
@@ -76,6 +69,7 @@ function fzf-fd() {
             --preview 'bat --plain --number --color always {}' \
             --preview-window down:70% \
             --bind "alt-h:reload:fd -HI -c always -t f --search-path ${dir}" \
+            --bind "alt-g:reload:${git_root_reload}" \
         )
     fi
     if [[ -n "$out" ]]; then
